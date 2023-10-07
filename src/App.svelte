@@ -1,47 +1,81 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+    import type { Song } from "./musicData";
+    import { songs } from "./musicData";
+
+    // Create state for current song
+
+    const currentSong: Song = songs[0];
+
+    console.log(currentSong)
+
+    // Create state for playing
+
+    let isPlaying = false;
+
+    // Create state for song progress
+
+    let songProgress = 0;
+
+
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+    <h1 class="sr-only">Music player</h1>
 
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+    <div class="container">
+        <div class="song-info">
+            <div class="cover" >
+                <img src={currentSong.image} alt={currentSong.name} />
+            </div>
+            <div class="name-artist">
+                <h2>{currentSong.name}</h2>
+                <h3>{currentSong.artist}</h3>
+            </div>
+        </div>
+    </div>
 </main>
 
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+<style lang="scss">
+    @import "./variables.scss";
+
+    .container {
+        width: 20rem;
+        background: linear-gradient(
+            to bottom,
+            $light-gray,
+            $dark-gray
+        );
+        padding: 1.3rem .8rem;
+        border-radius: 1rem;
+
+        .song-info {
+
+            .cover {
+                border-radius: 1rem;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 1rem;
+                }
+            }
+
+            .name-artist {
+                text-align: center;
+                margin-top: 1rem;
+
+                h2 {
+                    font-size: 1.3rem;
+                    margin: 0;
+                    color: $white;
+                }
+
+                h3 {
+                  color: $light-gray;
+                  font-size: .8rem;
+                  margin-top: .5rem;
+                }
+            }
+        }
+    }
 </style>
