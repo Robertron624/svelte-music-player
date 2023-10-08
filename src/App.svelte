@@ -29,6 +29,12 @@
         }
     };
 
+    window.addEventListener("keydown", (event) => {
+        if (event.code === "Space") {
+            handlePlay();
+        }
+    });
+
     function updateProgress() {
         songProgress = (audio.currentTime / audio.duration) * 100;
     }
@@ -43,40 +49,50 @@
     }
 
     function handleNext() {
-        // Stop the current song
-        audio.pause();
+        // If the song is at 100% progress, go to the next song, else skip 5 seconds
 
-        const currentIndex = songs.indexOf(currentSong);
-        if (currentIndex === songs.length - 1) {
-            currentSong = songs[0];
+        if (songProgress === 100) {
+            audio.pause();
+
+            const currentIndex = songs.indexOf(currentSong);
+            if (currentIndex === songs.length - 1) {
+                currentSong = songs[0];
+            } else {
+                currentSong = songs[currentIndex + 1];
+            }
+            audio = new Audio(currentSong.audio);
+
+            if (isPlaying) {
+                audio.play();
+            }
         } else {
-            currentSong = songs[currentIndex + 1];
-        }
-        audio = new Audio(currentSong.audio);
-
-        if(isPlaying) {
-            audio.play();
+            audio.currentTime += 5;
         }
     }
 
     function handlePrev() {
-        // Stop the current song
-        audio.pause();
 
-        const currentIndex = songs.indexOf(currentSong);
-        if (currentIndex === 0) {
-            currentSong = songs[songs.length - 1];
+        // If the song is at 0% progress, go to the previous song, else go back 5 seconds
+
+        if(songProgress === 0) {
+            audio.pause();
+
+            const currentIndex = songs.indexOf(currentSong);
+            if (currentIndex === 0) {
+                currentSong = songs[songs.length - 1];
+            } else {
+                currentSong = songs[currentIndex - 1];
+            }
+            audio = new Audio(currentSong.audio);
+
+            if (isPlaying) {
+                audio.play();
+            }
         } else {
-            currentSong = songs[currentIndex - 1];
-        }
-        audio = new Audio(currentSong.audio);
-
-        if(isPlaying) {
-            audio.play();
+            audio.currentTime -= 5;
         }
     }
-
-</script>ss
+</script>
 
 <main>
     <h1 class="sr-only">Music player</h1>
@@ -98,7 +114,13 @@
                 aria-valuemax={100}
                 aria-valuemin={0}
                 aria-valuenow={songProgress}
+                tabindex="0"
                 on:click={seek}
+                on:keydown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        seek(event);
+                    }
+                }}
             >
                 <div class="progress-bar" style="width: {songProgress}%" />
             </div>
@@ -124,9 +146,26 @@
                             />
                         </svg>
                     {:else}
-                    <svg style="display: flex; justify-content:center" width="32" height="32" viewBox="0 0 17 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10.6666 22.6667L10.6666 9.33335" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M5.33325 22.6667L5.33325 9.33335" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        <svg
+                            style="display: flex; justify-content:center"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 17 32"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M10.6666 22.6667L10.6666 9.33335"
+                                stroke="#fff"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                            <path
+                                d="M5.33325 22.6667L5.33325 9.33335"
+                                stroke="#fff"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
                         </svg>
                     {/if}
                 </button>
