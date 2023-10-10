@@ -49,47 +49,34 @@
     }
 
     function handleNext() {
-        // If the song is at 100% progress, go to the next song, else skip 5 seconds
+        audio.pause();
 
-        if (songProgress === 100) {
-            audio.pause();
-
-            const currentIndex = songs.indexOf(currentSong);
-            if (currentIndex === songs.length - 1) {
-                currentSong = songs[0];
-            } else {
-                currentSong = songs[currentIndex + 1];
-            }
-            audio = new Audio(currentSong.audio);
-
-            if (isPlaying) {
-                audio.play();
-            }
+        const currentIndex = songs.indexOf(currentSong);
+        if (currentIndex === songs.length - 1) {
+            currentSong = songs[0];
         } else {
-            audio.currentTime += 5;
+            currentSong = songs[currentIndex + 1];
+        }
+        audio = new Audio(currentSong.audio);
+
+        if (isPlaying) {
+            audio.play();
         }
     }
 
     function handlePrev() {
+        audio.pause();
 
-        // If the song is at 0% progress, go to the previous song, else go back 5 seconds
-
-        if(songProgress === 0) {
-            audio.pause();
-
-            const currentIndex = songs.indexOf(currentSong);
-            if (currentIndex === 0) {
-                currentSong = songs[songs.length - 1];
-            } else {
-                currentSong = songs[currentIndex - 1];
-            }
-            audio = new Audio(currentSong.audio);
-
-            if (isPlaying) {
-                audio.play();
-            }
+        const currentIndex = songs.indexOf(currentSong);
+        if (currentIndex === 0) {
+            currentSong = songs[songs.length - 1];
         } else {
-            audio.currentTime -= 5;
+            currentSong = songs[currentIndex - 1];
+        }
+        audio = new Audio(currentSong.audio);
+
+        if (isPlaying) {
+            audio.play();
         }
     }
 </script>
@@ -181,7 +168,8 @@
     @import "./variables.scss";
 
     .container {
-        width: 20rem;
+        width: 100%;
+        max-width: 20rem;
         background: linear-gradient(to bottom, $light-gray, $dark-gray);
         padding: 1.3rem 0.8rem;
         border-radius: 1rem;
@@ -232,6 +220,8 @@
                     left: 0;
                     height: 100%;
                     background-color: $fuchsia;
+                    filter: brightness(1.2);
+                    box-shadow: 0 0 10px $fuchsia;
                     border-radius: 1rem;
                 }
             }
@@ -254,6 +244,7 @@
                         border-radius: 50%;
                         padding: 0.5rem;
                         filter: brightness(1.2);
+                        box-shadow: 0 0 10px $fuchsia;
                     }
                 }
             }
