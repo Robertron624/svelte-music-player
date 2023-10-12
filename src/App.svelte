@@ -170,9 +170,16 @@
     .container {
         width: 100%;
         max-width: 20rem;
-        background: linear-gradient(to bottom, $light-gray, $dark-gray);
+        background: linear-gradient(45deg, $light-gray 10%, $dark-gray 90%);
+        // background light gray from bottom left to top right with 180deg but start to change to dark from 20% of the way
+
+
+
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
         padding: 1.3rem 0.8rem;
         border-radius: 1rem;
+        opacity: .7;
 
         .song-info {
             .cover {
